@@ -4,9 +4,9 @@ import os
 import tomllib
 from dataclasses import dataclass, fields, is_dataclass
 from pathlib import Path
+from typing import Any, cast
 
 from falcon.install_paths import bundled_config_candidates
-from typing import Any, cast
 
 
 @dataclass(frozen=True)
