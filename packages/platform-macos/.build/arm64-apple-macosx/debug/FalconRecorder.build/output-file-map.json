@@ -1,0 +1,40 @@
+{
+  "": {
+    "swift-dependencies": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/master.swiftdeps"
+  },
+  "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/Sources/FalconRecorder/EventTapRecorder.swift": {
+    "dependencies": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/EventTapRecorder.d",
+    "object": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/EventTapRecorder.swift.o",
+    "swiftmodule": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/EventTapRecorder~partial.swiftmodule",
+    "swift-dependencies": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/EventTapRecorder.swiftdeps",
+    "diagnostics": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/EventTapRecorder.dia"
+  },
+  "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/Sources/FalconRecorder/JSONLWriter.swift": {
+    "dependencies": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/JSONLWriter.d",
+    "object": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/JSONLWriter.swift.o",
+    "swiftmodule": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/JSONLWriter~partial.swiftmodule",
+    "swift-dependencies": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/JSONLWriter.swiftdeps",
+    "diagnostics": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/JSONLWriter.dia"
+  },
+  "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/Sources/FalconRecorder/TraceEvent.swift": {
+    "dependencies": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/TraceEvent.d",
+    "object": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/TraceEvent.swift.o",
+    "swiftmodule": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/TraceEvent~partial.swiftmodule",
+    "swift-dependencies": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/TraceEvent.swiftdeps",
+    "diagnostics": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/TraceEvent.dia"
+  },
+  "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/Sources/FalconRecorder/WindowContext.swift": {
+    "dependencies": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/WindowContext.d",
+    "object": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/WindowContext.swift.o",
+    "swiftmodule": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/WindowContext~partial.swiftmodule",
+    "swift-dependencies": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/WindowContext.swiftdeps",
+    "diagnostics": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/WindowContext.dia"
+  },
+  "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/Sources/FalconRecorder/main.swift": {
+    "dependencies": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/main.d",
+    "object": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/main.swift.o",
+    "swiftmodule": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/main~partial.swiftmodule",
+    "swift-dependencies": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/main.swiftdeps",
+    "diagnostics": "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/debug/FalconRecorder.build/main.dia"
+  }
+}

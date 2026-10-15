@@ -1,0 +1,8 @@
+{"kind": "window.changed", "ts": 1999.0, "app": "Cursor", "window": "welcome", "sessionId": "demo"}
+{"kind": "window.changed", "ts": 2000.0, "app": "Cursor", "window": "analyze.py — falcon", "sessionId": "demo"}
+{"kind": "keyboard.text_input", "ts": 2001.0, "text": "def describe", "app": "Cursor", "window": "analyze.py — falcon", "sessionId": "demo"}
+{"kind": "keyboard.text_input", "ts": 2002.0, "text": "def describe_event", "app": "Cursor", "window": "analyze.py — falcon", "sessionId": "demo"}
+{"kind": "keyboard.submit", "ts": 2003.0, "text": "def describe_event", "app": "Cursor", "window": "analyze.py — falcon", "sessionId": "demo"}
+{"kind": "mouse.click", "ts": 2004.0, "x": 512, "y": 384, "button": "left", "app": "Safari", "window": "Example", "sessionId": "demo"}
+{"event_id": "E-000106", "ts": 2005.0, "type": "press", "app": "Excel", "window": "Foglio1", "target": "Button|Salva", "value": null, "frame_id": null}
+{"event_id": "E-000107", "ts": 2006.0, "type": "value_change", "app": "Excel", "window": "Foglio1", "target": "Edit:Nome cliente", "value": "Acme Srl", "frame_id": null}

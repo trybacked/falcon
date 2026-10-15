@@ -1,0 +1,16 @@
+[capture]
+poll_interval_s = 0.5
+frame_interval_s = 3.0
+idle_gap_s = 45.0
+dedup_hamming = 6
+
+[llm]
+base_url = "https://ai-gateway.vercel.sh/v1"
+model = "openai/gpt-4o-mini"
+api_key_env = "AI_GATEWAY_API_KEY"
+
+[paths]
+sessions_root = "sessions"
+
+[output]
+language = "it"

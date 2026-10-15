@@ -1,0 +1,32 @@
+{"kind": "session.started", "sessionId": "complex-001", "ts": 3000.0}
+{"kind": "window.changed", "ts": 3000.5, "app": "Cursor", "window": "Welcome", "sessionId": "complex-001"}
+{"kind": "window.changed", "ts": 3001.0, "app": "Cursor", "window": "cli.py — falcon", "sessionId": "complex-001"}
+{"kind": "window.changed", "ts": 3001.5, "app": "Cursor", "window": "test_e2e_full.py — falcon", "sessionId": "complex-001"}
+{"kind": "keyboard.text_input", "ts": 3002.0, "text": "import", "app": "Cursor", "window": "test_e2e_full.py — falcon", "sessionId": "complex-001"}
+{"kind": "keyboard.text_input", "ts": 3002.5, "text": "import pytest", "app": "Cursor", "window": "test_e2e_full.py — falcon", "sessionId": "complex-001"}
+{"kind": "keyboard.submit", "ts": 3003.0, "text": "import pytest", "app": "Cursor", "window": "test_e2e_full.py — falcon", "sessionId": "complex-001"}
+{"kind": "mouse.click", "ts": 3003.5, "x": 120, "y": 44, "button": "left", "app": "Cursor", "window": "test_e2e_full.py — falcon", "sessionId": "complex-001"}
+{"kind": "window.changed", "ts": 3010.0, "app": "Safari", "window": "Portale HR — login", "sessionId": "complex-001"}
+{"kind": "window.changed", "ts": 3010.5, "app": "Safari", "window": "Portale HR — dashboard", "sessionId": "complex-001"}
+{"kind": "keyboard.text_input", "ts": 3011.0, "text": "mario.rossi@azienda.it", "app": "Safari", "window": "Portale HR — login", "sessionId": "complex-001"}
+{"kind": "keyboard.submit", "ts": 3011.5, "text": "mario.rossi@azienda.it", "app": "Safari", "window": "Portale HR — login", "sessionId": "complex-001"}
+{"kind": "mouse.click", "ts": 3012.0, "x": 640, "y": 420, "button": "left", "app": "Safari", "window": "Portale HR — dashboard", "sessionId": "complex-001"}
+{"kind": "mouse.click", "ts": 3012.5, "x": 800, "y": 520, "button": "right", "app": "Safari", "window": "Portale HR — dashboard", "sessionId": "complex-001"}
+{"kind": "ax.value_changed", "ts": 3013.0, "app": "Safari", "window": "Portale HR — login", "sessionId": "complex-001", "ax": {"role": "AXTextField", "title": "Email", "value": "mario.rossi@azienda.it"}}
+{"kind": "window.changed", "ts": 3020.0, "app": "Microsoft Excel", "window": "Report Q1.xlsx", "sessionId": "complex-001"}
+{"kind": "window.changed", "ts": 3020.5, "app": "Microsoft Excel", "window": "Report Q1.xlsx — Foglio2", "sessionId": "complex-001"}
+{"event_id": "E-000201", "ts": 3021.0, "type": "value_change", "app": "Microsoft Excel", "window": "Report Q1.xlsx — Foglio2", "target": "Edit:Codice fiscale", "value": "RSSMRA85T10A562S", "frame_id": null}
+{"event_id": "E-000202", "ts": 3021.5, "type": "value_change", "app": "Microsoft Excel", "window": "Report Q1.xlsx — Foglio2", "target": "Edit:Partita IVA", "value": "IT12345678901", "frame_id": null}
+{"event_id": "E-000203", "ts": 3022.0, "type": "press", "app": "Microsoft Excel", "window": "Report Q1.xlsx — Foglio2", "target": "Button|Salva e invia", "value": null, "frame_id": null}
+{"event_id": "E-000204", "ts": 3022.5, "type": "frame", "app": "Microsoft Excel", "window": "Report Q1.xlsx — Foglio2", "target": null, "value": null, "frame_id": "F-000010"}
+{"kind": "window.changed", "ts": 3030.0, "app": "Microsoft Outlook", "window": "Posta in arrivo", "sessionId": "complex-001"}
+{"kind": "window.changed", "ts": 3030.5, "app": "Microsoft Outlook", "window": "Nuovo messaggio", "sessionId": "complex-001"}
+{"kind": "keyboard.text_input", "ts": 3031.0, "text": "Oggetto: approvazione budget", "app": "Microsoft Outlook", "window": "Nuovo messaggio", "sessionId": "complex-001"}
+{"kind": "keyboard.submit", "ts": 3031.5, "text": "Oggetto: approvazione budget", "app": "Microsoft Outlook", "window": "Nuovo messaggio", "sessionId": "complex-001"}
+{"event_id": "E-000205", "ts": 3032.0, "type": "select", "app": "Microsoft Outlook", "window": "Nuovo messaggio", "target": "Button|Invia", "value": null, "frame_id": null}
+{"kind": "window.changed", "ts": 3040.0, "app": "Microsoft Teams", "window": "Chat — Finance", "sessionId": "complex-001"}
+{"kind": "mouse.click", "ts": 3040.5, "x": 1024, "y": 768, "button": "left", "app": "Microsoft Teams", "window": "Chat — Finance", "sessionId": "complex-001"}
+{"kind": "keyboard.text_input", "ts": 3041.0, "text": "Budget approvato", "app": "Microsoft Teams", "window": "Chat — Finance", "sessionId": "complex-001"}
+{"event_id": "E-000206", "ts": 3041.5, "type": "window_change", "app": "Microsoft Teams", "window": "Chat — Legal", "target": null, "value": null, "frame_id": null}
+{"event_id": "E-000207", "ts": 3042.0, "type": "app_activate", "app": "Notepad", "window": "note.txt", "target": null, "value": null, "frame_id": null}
+{"kind": "session.ended", "sessionId": "complex-001", "ts": 3050.0}

@@ -1,0 +1,66 @@
+client:
+  name: basic
+  file-system: device-agnostic
+tools: {}
+targets:
+  "FalconRecorder-arm64-apple-macosx26.0-release.module": ["<FalconRecorder-arm64-apple-macosx26.0-release.module>"]
+  "PackageStructure": ["<PackageStructure>"]
+  "falcon-recorder-arm64-apple-macosx26.0-release.exe": ["<falcon-recorder-arm64-apple-macosx26.0-release.exe>"]
+  "main": ["<FalconRecorder-arm64-apple-macosx26.0-release.module>","<falcon-recorder-arm64-apple-macosx26.0-release.exe>"]
+  "test": ["<FalconRecorder-arm64-apple-macosx26.0-release.module>","<falcon-recorder-arm64-apple-macosx26.0-release.exe>"]
+default: "main"
+nodes:
+  "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/Sources/FalconRecorder/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+commands:
+  "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/Sources/FalconRecorder/EventTapRecorder.swift","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/Sources/FalconRecorder/JSONLWriter.swift","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/Sources/FalconRecorder/TraceEvent.swift","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/Sources/FalconRecorder/WindowContext.swift","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/Sources/FalconRecorder/main.swift"]
+    outputs: ["/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/sources"]
+    description: "Write auxiliary file /Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/sources"
+
+  "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/falcon-recorder.product/Objects.LinkFileList":
+    tool: write-auxiliary-file
+    inputs: ["<link-file-list>","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/EventTapRecorder.swift.o","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/JSONLWriter.swift.o","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/TraceEvent.swift.o","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/WindowContext.swift.o","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/main.swift.o"]
+    outputs: ["/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/falcon-recorder.product/Objects.LinkFileList"]
+    description: "Write auxiliary file /Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/falcon-recorder.product/Objects.LinkFileList"
+
+  "/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt":
+    tool: write-auxiliary-file
+    inputs: ["<swift-get-version>","/Library/Developer/CommandLineTools/usr/bin/swiftc"]
+    outputs: ["/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt"]
+    always-out-of-date: "true"
+    description: "Write auxiliary file /Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt"
+
+  "<FalconRecorder-arm64-apple-macosx26.0-release.module>":
+    tool: phony
+    inputs: ["/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/EventTapRecorder.swift.o","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/JSONLWriter.swift.o","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/TraceEvent.swift.o","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/WindowContext.swift.o","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/main.swift.o","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/Modules/FalconRecorder.swiftmodule"]
+    outputs: ["<FalconRecorder-arm64-apple-macosx26.0-release.module>"]
+
+  "<falcon-recorder-arm64-apple-macosx26.0-release.exe>":
+    tool: phony
+    inputs: ["/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/falcon-recorder"]
+    outputs: ["<falcon-recorder-arm64-apple-macosx26.0-release.exe>"]
+
+  "C.FalconRecorder-arm64-apple-macosx26.0-release.module":
+    tool: shell
+    inputs: ["/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/Sources/FalconRecorder/EventTapRecorder.swift","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/Sources/FalconRecorder/JSONLWriter.swift","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/Sources/FalconRecorder/TraceEvent.swift","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/Sources/FalconRecorder/WindowContext.swift","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/Sources/FalconRecorder/main.swift","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/swift-version--1AB21518FC5DEDBE.txt","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/sources"]
+    outputs: ["/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/EventTapRecorder.swift.o","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/JSONLWriter.swift.o","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/TraceEvent.swift.o","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/WindowContext.swift.o","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/main.swift.o","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/Modules/FalconRecorder.swiftmodule"]
+    description: "Compiling Swift Module 'FalconRecorder' (5 sources)"
+    args: ["/Library/Developer/CommandLineTools/usr/bin/swiftc","-module-name","FalconRecorder","-emit-dependencies","-emit-module","-emit-module-path","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/Modules/FalconRecorder.swiftmodule","-output-file-map","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/output-file-map.json","-whole-module-optimization","-num-threads","10","-c","@/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/sources","-I","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/Modules","-target","arm64-apple-macosx13.0","-whole-module-optimization","-num-threads","10","-serialize-diagnostics","-O","-j10","-DSWIFT_PACKAGE","-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE","-module-cache-path","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/ModuleCache","-parseable-output","-Xfrontend","-entry-point-function-name","-Xfrontend","FalconRecorder_main","-color-diagnostics","-swift-version","5","-I","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-L","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-plugin-path","/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing","-sdk","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-g","-Xcc","-isysroot","-Xcc","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-Xcc","-fPIC","-Xcc","-g","-package-name","platform_macos"]
+
+  "C.falcon-recorder-arm64-apple-macosx26.0-release.exe":
+    tool: shell
+    inputs: ["/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/EventTapRecorder.swift.o","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/JSONLWriter.swift.o","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/TraceEvent.swift.o","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/WindowContext.swift.o","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/FalconRecorder.build/main.swift.o","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/falcon-recorder.product/Objects.LinkFileList"]
+    outputs: ["/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/falcon-recorder"]
+    description: "Linking ./.build/arm64-apple-macosx/release/falcon-recorder"
+    args: ["/Library/Developer/CommandLineTools/usr/bin/swiftc","-L","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release","-o","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/falcon-recorder","-module-name","falcon_recorder","-Xlinker","-no_warn_duplicate_libraries","-emit-executable","-Xlinker","-dead_strip","-Xlinker","-alias","-Xlinker","_FalconRecorder_main","-Xlinker","_main","-Xlinker","-rpath","-Xlinker","@loader_path","@/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/.build/arm64-apple-macosx/release/falcon-recorder.product/Objects.LinkFileList","-Xlinker","-rpath","-Xlinker","/Library/Developer/CommandLineTools/usr/lib/swift-6.2/macosx","-target","arm64-apple-macosx13.0","-framework","ApplicationServices","-framework","AppKit","-framework","Carbon","-I","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-L","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-plugin-path","/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing","-sdk","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-g"]
+
+  "PackageStructure":
+    tool: package-structure-tool
+    inputs: ["/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/Sources/FalconRecorder/","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/Package.swift","/Users/lucatropea/Desktop/backed/falcon/packages/platform-macos/Package.resolved"]
+    outputs: ["<PackageStructure>"]
+    description: "Planning build"
+    allow-missing-inputs: true
+

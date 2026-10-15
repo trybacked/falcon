@@ -1,0 +1,12 @@
+{"event_id": "E-000001", "ts": 1000.0, "type": "app_activate", "app": "Safari", "window": null, "target": null, "value": null, "frame_id": null}
+{"event_id": "E-000002", "ts": 1001.0, "type": "window_change", "app": "Safari", "window": "Login — user@example.com", "target": null, "value": null, "frame_id": null}
+{"event_id": "E-000003", "ts": 1002.0, "type": "value_change", "app": "Safari", "window": "Login", "target": "Email", "value": "user@example.com", "frame_id": null}
+{"event_id": "E-000004", "ts": 1002.5, "type": "value_change", "app": "Safari", "window": "Login", "target": "Email", "value": "user@example.com", "frame_id": null}
+{"event_id": "E-000005", "ts": 1003.0, "type": "value_change", "app": "Safari", "window": "Login", "target": "Email", "value": "altro@test.it", "frame_id": null}
+{"event_id": "E-000006", "ts": 1004.0, "type": "press", "app": "Safari", "window": "Login", "target": "Accedi", "value": null, "frame_id": null}
+{"event_id": "E-000007", "ts": 1050.0, "type": "app_activate", "app": "Excel", "window": null, "target": null, "value": null, "frame_id": null}
+{"event_id": "E-000008", "ts": 1051.0, "type": "window_change", "app": "Excel", "window": "Foglio1", "target": null, "value": null, "frame_id": null}
+{"event_id": "E-000009", "ts": 1052.0, "type": "value_change", "app": "Excel", "window": "Foglio1", "target": "A1", "value": "RSSMRA85T10A562S", "frame_id": null}
+{"event_id": "E-000010", "ts": 1053.0, "type": "select", "app": "Excel", "window": "Foglio1", "target": "Salva", "value": null, "frame_id": null}
+{"event_id": "E-000011", "ts": 1054.0, "type": "frame", "app": "Excel", "window": "Foglio1", "target": null, "value": null, "frame_id": "F-000001"}
+{"event_id": "E-000012", "ts": 1055.0, "type": "value_change", "app": "Excel", "window": "Foglio1", "target": "B1", "value": "IT12345678901", "frame_id": null}
