@@ -15,3 +15,6 @@ typecheck:
 	uv run mypy src/falcon
 
 ci: lint typecheck test
+
+release-macos:
+	bash scripts/build-release-macos.sh

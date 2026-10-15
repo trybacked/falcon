@@ -4,6 +4,8 @@ import os
 import tomllib
 from dataclasses import dataclass, fields, is_dataclass
 from pathlib import Path
+
+from falcon.install_paths import bundled_config_candidates
 from typing import Any, cast
 
 
@@ -74,4 +76,9 @@ def resolve_config_path(arg: str | None) -> Path | None:
     if env:
         return Path(env)
     p = Path("config.toml")
-    return p if p.is_file() else None
+    if p.is_file():
+        return p
+    for candidate in bundled_config_candidates():
+        if candidate.is_file():
+            return candidate
+    return None

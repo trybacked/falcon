@@ -3,3 +3,7 @@ __pycache__/
 config.toml
 sessions/
 .env
+dist/
+build/
+*.spec.bak
+packages/platform-macos/.build/

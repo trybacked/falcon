@@ -1,0 +1,55 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-macos:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Build macOS bundle
+        run: bash scripts/build-release-macos.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Falcon-macos
+          path: dist/Falcon-macos-*.zip
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+      - name: Build Windows bundle
+        shell: pwsh
+        run: ./scripts/build-release-windows.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Falcon-win64
+          path: dist/Falcon-win64.zip
+
+  release:
+    needs: [build-macos, build-windows]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/Falcon-macos/*.zip
+            artifacts/Falcon-win64/*.zip
+          generate_release_notes: true
