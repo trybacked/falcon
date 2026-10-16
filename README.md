@@ -77,10 +77,10 @@ flowchart LR
   scrub --> segment["Segment"]
   segment --> analyze["Analyze"]
   analyze --> distill["Distill optional LLM"]
-  distill --> out["playbook · ontology · questions"]
+  distill --> out["report · playbook · ontology · questions"]
 ```
 
-Recording produces raw JSONL. Ingest normalizes recorder formats. Scrubbing removes or tokenizes PII. Analyze builds steps and segments. Distill adds ontology and competency questions when an API key is configured.
+Recording produces raw JSONL. Ingest normalizes recorder formats. Scrubbing removes or tokenizes PII. Analyze builds steps and segments. Distill, when an API key is configured, reconstructs the business process as a structured report for Forward Deployed Engineers and Deployment Strategists: executive summary, actors, systems, ordered phases with actions, decision points and data entities, pain points, prioritised deployment opportunities, ontology proposals, competency questions, open stakeholder questions, assumptions, and a step → event traceability appendix. Every claim cites step ids present in `analysis.json`; citations to unknown steps are dropped.
 
 ---
 
@@ -92,8 +92,8 @@ Recording produces raw JSONL. Ingest normalizes recorder formats. Scrubbing remo
 | **Check** | Is the bundle valid? | `falcon check` — manifest, consent, non-empty trace |
 | **Ingest** | Is the trace in one shape? | Optional normalize in place on `trace.raw.jsonl` |
 | **Analyze** | What are the steps? | Scrub → `trace.jsonl`, `segments.json`, `analysis.json` |
-| **Distill** | What ontology fits? | LLM → `playbook.md`, YAML files (playbook text is also built without LLM) |
-| **Report** | Show the playbook | Prints `playbook.md` |
+| **Distill** | What business process is this? | LLM → `report.md` (phases, systems, pain points, opportunities, ontology, CQs) + YAML files; `playbook.md` is built without LLM |
+| **Report** | Show the process report | Prints `report.md` (FDE / Deployment Strategist oriented) |
 
 ```mermaid
 flowchart TB
@@ -120,8 +120,8 @@ Global: `falcon --version` · `falcon --config path/to/config.toml` · env `FW_*
 | `falcon check --session ID` | Validate | Manifest + trace checks, no writes |
 | `falcon ingest --session ID` | Normalize | Recorder JSONL → unified events in `trace.raw.jsonl` |
 | `falcon analyze --session ID` | Understand | Scrubbed trace, segments, `analysis.json` |
-| `falcon distill --session ID` | Enrich | Playbook + ontology + competency questions (needs API key) |
-| `falcon report --session ID` | Read | Playbook to stdout |
+| `falcon distill --session ID` | Enrich | Enterprise process report + playbook + ontology + competency questions (needs API key) |
+| `falcon report --session ID` | Read | `report.md` to stdout |
 
 If `--session` is omitted, commands use the latest session under `sessions_root` (from config).
 

@@ -164,20 +164,25 @@ def cmd_distill(args: argparse.Namespace) -> None:
     except RuntimeError as exc:
         print(str(exc), file=sys.stderr)
         sys.exit(1)
-    playbook, prop, cq = run_distill(steps, client, cfg.output)
-    layout.playbook.write_text(playbook, encoding="utf-8")
-    layout.ontology.write_text(prop, encoding="utf-8")
-    layout.questions.write_text(cq, encoding="utf-8")
-    print(f"outputs in {layout.root}")
+    out = run_distill(steps, client, cfg.output, session_id=layout.root.name)
+    layout.playbook.write_text(out.playbook_md, encoding="utf-8")
+    layout.report.write_text(out.report_md, encoding="utf-8")
+    layout.ontology.write_text(out.ontology_yaml, encoding="utf-8")
+    layout.questions.write_text(out.questions_yaml, encoding="utf-8")
+    print(
+        f"outputs in {layout.root}: {len(out.report.phases)} phases, "
+        f"{len(out.report.opportunities)} opportunities, "
+        f"{len(out.report.ontology_proposals)} ontology proposals"
+    )
 
 
 def cmd_report(args: argparse.Namespace) -> None:
     cfg = _cfg(args)
     layout = _layout(args, cfg)
-    if not layout.playbook.is_file():
-        print(f"missing {layout.playbook}; run distill first", file=sys.stderr)
+    if not layout.report.is_file():
+        print(f"missing {layout.report}; run distill first", file=sys.stderr)
         sys.exit(1)
-    print(layout.playbook.read_text(encoding="utf-8"))
+    print(layout.report.read_text(encoding="utf-8"))
 
 
 def main() -> None:
@@ -204,8 +209,8 @@ def main() -> None:
         ("check", cmd_check, "Validate manifest + trace.raw without writing outputs"),
         ("ingest", cmd_ingest, "Normalize recorder JSONL to CaptureEvent rows in trace.raw"),
         ("analyze", cmd_analyze, "Scrub PII, segment, build analysis.json"),
-        ("distill", cmd_distill, "LLM ontology/CQ + playbook.md (requires API key)"),
-        ("report", cmd_report, "Print playbook.md to stdout"),
+        ("distill", cmd_distill, "LLM process report for FDE/Deployment Strategist (API key)"),
+        ("report", cmd_report, "Print report.md to stdout"),
     ):
         sp = sub.add_parser(name, help=help_text)
         sp.add_argument("--session", help="Session folder name under sessions_root")

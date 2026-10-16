@@ -30,8 +30,70 @@ def _default_distill_json(prompt: str) -> str:
     if not step_ids:
         step_ids = ["S001"]
     primary = step_ids[0]
+    half = max(1, len(step_ids) // 2)
     return json.dumps(
         {
+            "process": {
+                "name": "Processo di test",
+                "summary": "Sessione sintetica usata nei test offline.",
+                "business_goal": "Verificare la pipeline",
+                "scope": "Solo eventi del fixture",
+                "actors": [{"role": "Operatore", "responsibilities": "Esegue il processo"}],
+                "systems": [
+                    {"name": "App", "purpose": "Sistema di test", "evidence_steps": [primary]}
+                ],
+            },
+            "phases": [
+                {
+                    "phase_id": "P01",
+                    "name": "Preparazione",
+                    "objective": "Avvio del lavoro",
+                    "narrative": "Prima metà degli step.",
+                    "actor_role": "Operatore",
+                    "systems": ["App"],
+                    "inputs": ["Richiesta"],
+                    "outputs": ["Bozza"],
+                    "actions": [{"description": "Apre il contesto", "step_ids": step_ids[:half]}],
+                    "decision_points": [],
+                    "data_entities": ["Richiesta"],
+                    "pain_points": [],
+                    "evidence_steps": step_ids[:half],
+                },
+                {
+                    "phase_id": "P02",
+                    "name": "Esecuzione",
+                    "objective": "Completamento",
+                    "narrative": "Seconda metà degli step.",
+                    "actor_role": "Operatore",
+                    "systems": ["App"],
+                    "inputs": ["Bozza"],
+                    "outputs": ["Risultato"],
+                    "actions": [{"description": "Completa il lavoro", "step_ids": step_ids[half:]}],
+                    "decision_points": ["Invio o salvataggio"],
+                    "data_entities": ["Risultato"],
+                    "pain_points": ["Passaggi manuali"],
+                    "evidence_steps": step_ids[half:],
+                },
+            ],
+            "pain_points": [
+                {
+                    "title": "Doppia digitazione",
+                    "description": "Dati reinseriti a mano",
+                    "impact": "tempo",
+                    "evidence_steps": [primary, "S999"],
+                }
+            ],
+            "opportunities": [
+                {
+                    "title": "Automatizzare l'inserimento",
+                    "description": "Precompilare i campi",
+                    "type": "automation",
+                    "value_hypothesis": "Meno tempo per pratica",
+                    "effort": "low",
+                    "priority": "P1",
+                    "evidence_steps": [primary],
+                }
+            ],
             "ontology_proposals": [
                 {
                     "kind": "object_type",
@@ -47,6 +109,10 @@ def _default_distill_json(prompt: str) -> str:
                     "evidence_steps": step_ids[: min(2, len(step_ids))],
                 }
             ],
+            "open_questions": [
+                {"question": "Chi approva?", "audience": "process owner", "why": "Non osservato"}
+            ],
+            "assumptions": ["Sessione rappresentativa"],
         },
         ensure_ascii=False,
     )

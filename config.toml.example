@@ -6,7 +6,7 @@ dedup_hamming = 6
 
 [llm]
 base_url = "https://ai-gateway.vercel.sh/v1"
-model = "openai/gpt-4o-mini"
+model = "deepseek/deepseek-v4-flash"
 api_key_env = "AI_GATEWAY_API_KEY"
 
 [paths]

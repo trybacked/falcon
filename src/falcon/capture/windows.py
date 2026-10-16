@@ -45,18 +45,31 @@ def _element_value(info: Any) -> Any:
     return None
 
 
+def _foreground_hwnd() -> int | None:
+    import win32gui
+
+    hwnd = win32gui.GetForegroundWindow()
+    return hwnd or None
+
+
+def _uia_window_from_hwnd(hwnd: int) -> Any:
+    from pywinauto import Desktop
+
+    return Desktop(backend="uia").window(handle=hwnd)
+
+
 def default_foreground() -> tuple[str, str | None]:
     import win32api
     import win32gui
     import win32process
-    from pywinauto import Desktop
+
+    hwnd = _foreground_hwnd()
+    if not hwnd:
+        return "", None
 
     try:
-        win = Desktop(backend="uia").get_active()
+        win = _uia_window_from_hwnd(hwnd)
     except Exception:
-        hwnd = win32gui.GetForegroundWindow()
-        if not hwnd:
-            return "", None
         title = win32gui.GetWindowText(hwnd) or None
         return title or "", title
 
@@ -93,9 +106,12 @@ def default_focused() -> tuple[str, str, Any] | None:
 
 def default_is_ready() -> tuple[bool, str]:
     try:
-        from pywinauto import Desktop
+        from pywinauto.uia_defines import IUIA
 
-        Desktop(backend="uia").get_active()
+        IUIA()
+        hwnd = _foreground_hwnd()
+        if hwnd is not None:
+            _uia_window_from_hwnd(hwnd).window_text()
         return True, ""
     except ImportError:
         return False, (

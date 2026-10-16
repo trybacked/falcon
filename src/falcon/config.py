@@ -20,7 +20,7 @@ class CaptureConfig:
 @dataclass(frozen=True)
 class LlmConfig:
     base_url: str = "https://ai-gateway.vercel.sh/v1"
-    model: str = "openai/gpt-4o-mini"
+    model: str = "deepseek/deepseek-v4-flash"
     api_key_env: str = "AI_GATEWAY_API_KEY"
     timeout_s: float = 120.0
 

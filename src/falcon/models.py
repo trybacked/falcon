@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 import json
-from dataclasses import asdict, dataclass, fields
+from dataclasses import MISSING, asdict, dataclass, field, fields, is_dataclass
 from enum import StrEnum
-from typing import Any, Literal
+from typing import Any, Literal, get_args, get_origin, get_type_hints
 
 
 class EventType(StrEnum):
@@ -180,20 +180,140 @@ class ActionStep:
     evidence_frames: list[str]
 
 
+OntologyKind = Literal["object_type", "link_type", "property"]
+OpportunityType = Literal[
+    "automation", "integration", "ai_assist", "process_redesign", "data_quality"
+]
+Effort = Literal["low", "medium", "high"]
+Priority = Literal["P0", "P1", "P2"]
+
+
 @dataclass(frozen=True)
 class OntologyProposal:
-    kind: Literal["object_type", "link_type"]
+    kind: OntologyKind
     name: str
     description: str
-    evidence: list[str]
+    evidence: list[str] = field(default_factory=list)
 
 
 @dataclass(frozen=True)
 class CompetencyQuestion:
     question: str
     rationale: str
-    evidence_steps: list[str]
+    evidence_steps: list[str] = field(default_factory=list)
+
+
+@dataclass(frozen=True)
+class Actor:
+    role: str
+    responsibilities: str = ""
+
+
+@dataclass(frozen=True)
+class SystemRef:
+    name: str
+    purpose: str = ""
+    evidence_steps: list[str] = field(default_factory=list)
+
+
+@dataclass(frozen=True)
+class ProcessOverview:
+    name: str
+    summary: str
+    business_goal: str = ""
+    scope: str = ""
+    actors: list[Actor] = field(default_factory=list)
+    systems: list[SystemRef] = field(default_factory=list)
+
+
+@dataclass(frozen=True)
+class PhaseAction:
+    description: str
+    step_ids: list[str] = field(default_factory=list)
+
+
+@dataclass(frozen=True)
+class ProcessPhase:
+    phase_id: str
+    name: str
+    objective: str
+    narrative: str = ""
+    actor_role: str = ""
+    systems: list[str] = field(default_factory=list)
+    inputs: list[str] = field(default_factory=list)
+    outputs: list[str] = field(default_factory=list)
+    actions: list[PhaseAction] = field(default_factory=list)
+    decision_points: list[str] = field(default_factory=list)
+    data_entities: list[str] = field(default_factory=list)
+    pain_points: list[str] = field(default_factory=list)
+    evidence_steps: list[str] = field(default_factory=list)
+
+
+@dataclass(frozen=True)
+class PainPoint:
+    title: str
+    description: str
+    impact: str = ""
+    evidence_steps: list[str] = field(default_factory=list)
+
+
+@dataclass(frozen=True)
+class Opportunity:
+    title: str
+    description: str
+    type: OpportunityType = "automation"
+    value_hypothesis: str = ""
+    effort: Effort = "medium"
+    priority: Priority = "P1"
+    evidence_steps: list[str] = field(default_factory=list)
+
+
+@dataclass(frozen=True)
+class OpenQuestion:
+    question: str
+    audience: str = ""
+    why: str = ""
+
+
+@dataclass(frozen=True)
+class ProcessReport:
+    process: ProcessOverview
+    phases: list[ProcessPhase] = field(default_factory=list)
+    pain_points: list[PainPoint] = field(default_factory=list)
+    opportunities: list[Opportunity] = field(default_factory=list)
+    ontology_proposals: list[OntologyProposal] = field(default_factory=list)
+    competency_questions: list[CompetencyQuestion] = field(default_factory=list)
+    open_questions: list[OpenQuestion] = field(default_factory=list)
+    assumptions: list[str] = field(default_factory=list)
 
 
 def dataclass_list_to_json(items: list[Any]) -> str:
     return json.dumps([asdict(x) for x in items], ensure_ascii=False, indent=1)
+
+
+def _coerce(tp: Any, value: Any) -> Any:
+    origin = get_origin(tp)
+    if origin is list:
+        (item_tp,) = get_args(tp)
+        return [_coerce(item_tp, v) for v in value] if isinstance(value, list) else []
+    if origin is Literal:
+        allowed = get_args(tp)
+        return value if value in allowed else allowed[0]
+    if is_dataclass(tp) and isinstance(tp, type):
+        return dataclass_from_dict(tp, value if isinstance(value, dict) else {})
+    if tp is str:
+        return "" if value is None else str(value)
+    return value
+
+
+def dataclass_from_dict[T](cls: type[T], data: dict[str, Any]) -> T:
+    """Build a dataclass from untrusted dict data: unknown keys dropped, missing ones defaulted."""
+    hints = get_type_hints(cls)
+    kwargs: dict[str, Any] = {}
+    for f in fields(cls):  # type: ignore[arg-type]
+        required = f.default is MISSING and f.default_factory is MISSING
+        if f.name in data:
+            kwargs[f.name] = _coerce(hints[f.name], data[f.name])
+        elif required:
+            kwargs[f.name] = _coerce(hints[f.name], None)
+    return cls(**kwargs)

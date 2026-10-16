@@ -46,4 +46,7 @@ def extract_json(raw: str) -> dict[str, Any]:
     text = raw.strip()
     if text.startswith("```"):
         text = text.split("\n", 1)[1].rsplit("```", 1)[0]
-    return cast(dict[str, Any], json.loads(text))
+    start, end = text.find("{"), text.rfind("}")
+    if start == -1 or end == -1:
+        raise ValueError("LLM response contains no JSON object")
+    return cast(dict[str, Any], json.loads(text[start : end + 1]))

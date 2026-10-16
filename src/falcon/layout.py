@@ -41,6 +41,10 @@ class SessionLayout:
         return self.root / "playbook.md"
 
     @property
+    def report(self) -> Path:
+        return self.root / "report.md"
+
+    @property
     def ontology(self) -> Path:
         return self.root / "ontology_proposals.yaml"
 

@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 import argparse
+import io
 import json
 import subprocess
 import sys
+from contextlib import redirect_stdout
 from pathlib import Path
 
 import pytest
@@ -62,19 +64,20 @@ def test_e2e_cli_orr_to_report(
     cli.cmd_distill(_args(session_id, config_path))
 
     assert layout.playbook.is_file()
+    assert layout.report.is_file()
     assert layout.ontology.is_file()
     assert layout.questions.is_file()
     playbook = layout.playbook.read_text(encoding="utf-8")
     assert playbook.startswith("# Playbook")
     assert "analyze.py — falcon" in playbook or "Cursor" in playbook
 
-    import io
-    from contextlib import redirect_stdout
-
     buf = io.StringIO()
     with redirect_stdout(buf):
         cli.cmd_report(_args(session_id, config_path))
-    assert "# Playbook" in buf.getvalue()
+    printed = buf.getvalue()
+    assert printed.startswith("# Report di processo")
+    assert f"**Sessione:** {session_id}" in printed
+    assert "## Appendice A" in printed
 
     assert fake_llm.prompts
     prompt = fake_llm.prompts[0]
@@ -177,6 +180,9 @@ def test_e2e_complex_multi_window_session(
     assert playbook.count("## ") >= 20
     assert "Evidence:" in playbook
     assert "F-000010" not in fake_llm.prompts[0]
+    report = layout.report.read_text(encoding="utf-8")
+    assert report.count("| S0") >= 25
+    assert "Microsoft Outlook" in report
 
 
 @pytest.mark.usefixtures("block_network")

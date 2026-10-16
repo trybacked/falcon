@@ -56,22 +56,44 @@ def test_offline_pipeline(
     layout.analysis.write_text(steps_to_json(steps), encoding="utf-8")
 
     output = OutputConfig(language="it")
-    playbook, prop_yaml, cq_yaml = run_distill(steps, fake_llm, output)
-    layout.playbook.write_text(playbook, encoding="utf-8")
-    layout.ontology.write_text(prop_yaml, encoding="utf-8")
-    layout.questions.write_text(cq_yaml, encoding="utf-8")
+    out = run_distill(steps, fake_llm, output, session_id="pipeline")
+    layout.playbook.write_text(out.playbook_md, encoding="utf-8")
+    layout.report.write_text(out.report_md, encoding="utf-8")
+    layout.ontology.write_text(out.ontology_yaml, encoding="utf-8")
+    layout.questions.write_text(out.questions_yaml, encoding="utf-8")
 
     assert layout.trace.is_file()
     assert layout.analysis.is_file()
     assert layout.playbook.is_file()
+    assert layout.report.is_file()
     assert layout.ontology.is_file()
     assert layout.questions.is_file()
 
     assert len(steps) >= 8
-    assert "# Playbook" in playbook
-    assert "E-000001" in playbook
-    assert "object_type" in prop_yaml or "UserAction" in prop_yaml
-    assert "question" in cq_yaml.lower() or "Quali" in cq_yaml
+    assert "# Playbook" in out.playbook_md
+    assert "E-000001" in out.playbook_md
+    assert "object_type" in out.ontology_yaml or "UserAction" in out.ontology_yaml
+    assert "question" in out.questions_yaml.lower() or "Quali" in out.questions_yaml
+
+    report_md = out.report_md
+    assert report_md.startswith("# Report di processo — Processo di test")
+    for section in (
+        "## 1. Executive summary",
+        "## 4. Processo end-to-end per fasi",
+        "### 4.1 Fase P01 — Preparazione",
+        "### 4.2 Fase P02 — Esecuzione",
+        "## 6. Opportunità di deployment",
+        "## 7. Proposte di ontologia",
+        "## Appendice A — Tracciabilità step → eventi",
+    ):
+        assert section in report_md, section
+    assert "S001 (E-000001)" in report_md
+    assert "S999" not in report_md
+    half = len(steps) // 2
+    assert f"S001–S{half:03d} ({half} step)" in report_md
+    assert [p.phase_id for p in out.report.phases] == ["P01", "P02"]
+    covered = {sid for p in out.report.phases for sid in p.evidence_steps}
+    assert covered == {s.step_id for s in steps}
 
     assert len(fake_llm.prompts) == 1
     joined_prompts = "\n".join(fake_llm.prompts)

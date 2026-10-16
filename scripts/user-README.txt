@@ -11,7 +11,8 @@ Falcon — installazione (senza Python, uv o pip)
 
    falcon analyze --session demo
    falcon distill --session demo    (richiede AI_GATEWAY_API_KEY)
-   falcon report --session demo
+   falcon report --session demo     (stampa report.md: processo per fasi,
+                                     criticità, opportunità, ontologia)
 
 Permessi macOS: Accessibility (+ spesso Input Monitoring) per falcon-recorder
 in Impostazioni → Privacy e sicurezza.
