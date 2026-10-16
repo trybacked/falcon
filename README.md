@@ -3,146 +3,185 @@
     <img src="docs/assets/logo.png" alt="Falcon" width="420" />
   </picture>
   <p>
-    <strong>Turn voluntary UI shadowing into evidence-backed playbooks</strong><br />
-    Local capture, PII scrubbing, and ontology proposals — without sending screenshots to the cloud
+    <strong>Local UI shadowing that produces evidence-backed playbooks</strong><br />
+    Record a work session on your own machine. Get a step-by-step playbook, ontology proposals, and competency questions, each one linked to the events that justify it.
   </p>
   <p>
     <img src="https://img.shields.io/badge/Python-3.12+-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.12+" />
     <img src="https://img.shields.io/badge/macOS-Swift_recorder-000000?style=for-the-badge&logo=apple&logoColor=white" alt="macOS" />
-    <img src="https://img.shields.io/badge/Windows-UIA-0078D4?style=for-the-badge&logo=windows&logoColor=white" alt="Windows" />
-    <img src="https://img.shields.io/badge/Platform-macOS_%7C_Windows-1B4D3E?style=for-the-badge" alt="Platforms" />
+    <img src="https://img.shields.io/badge/Windows-UI_Automation-0078D4?style=for-the-badge&logo=windows&logoColor=white" alt="Windows" />
+    <img src="https://img.shields.io/badge/Data-stays_local-1B4D3E?style=for-the-badge" alt="Data stays local" />
   </p>
 </div>
 
-Teams learn how work really gets done by watching screens, clicks, and app switches — but that knowledge rarely becomes structured documentation. Falcon records a **consent-based session** on the user’s machine, builds a readable **trace**, and produces a **playbook**, **ontology proposals**, and **competency questions** with citations back to events in the trace.
+## What Falcon does
 
-Capture is **platform-native** (Swift on macOS, UI Automation on Windows). Analysis is one shared **Python pipeline**: normalize recorder output, scrub sensitive text, segment tasks, describe steps, and optionally call an LLM only for ontology and questions. Screenshots stay on disk; **scrubbed event text** is what may be sent to the model when you run `distill`.
+Most organizations know how work gets done only through the people who do it. Falcon makes that knowledge explicit. A person agrees to be shadowed, starts a recording, and works as usual. When the session ends, Falcon turns the recorded activity into documentation that can be reviewed, edited, and shared.
 
-Falcon does not replace your systems of record. It assumes you already have someone willing to be shadowed and a safe place to store session folders locally. It focuses on **trace quality**, **privacy invariants**, and **reviewable outputs** you can edit before wider use.
+Falcon produces three outputs for every session:
 
----
+| Output | File | Description |
+| ------ | ---- | ----------- |
+| **Playbook** | `playbook.md` | A readable list of the steps the person performed |
+| **Ontology proposals** | `ontology_proposals.yaml` | Business objects, properties, and relationships observed during the session |
+| **Competency questions** | `competency_questions.yaml` | Questions the resulting ontology should be able to answer |
 
-## Quick start
+Every step cites the event identifiers it was derived from, so each statement can be traced back to the original recording.
 
-**End users (no Python tools):** download the latest **`Falcon-macos-*.zip`** or **`Falcon-win64.zip`** from [Releases](https://github.com/trybacked/falcon/releases), unzip, run **Install** (macOS: `Install.command`, Windows: `Install.ps1`), open a new terminal:
+Falcon is built around three principles:
 
-```bash
-falcon record --name demo
-# work as usual, then Ctrl+C to stop
-
-falcon analyze --session demo
-export AI_GATEWAY_API_KEY=...   # only for distill
-falcon distill --session demo
-falcon report --session demo
-```
-
-On macOS, grant **Accessibility** (and often **Input Monitoring**) to `falcon-recorder` when prompted. See `README.txt` inside the release bundle.
-
-**Contributors** (from source):
-
-```bash
-git clone https://github.com/trybacked/falcon.git
-cd falcon && uv sync --group dev
-uv run falcon --help
-```
-
-Build a release bundle locally:
-
-```bash
-bash scripts/build-release-macos.sh      # → dist/Falcon-macos-<arch>.zip
-# Windows: ./scripts/build-release-windows.ps1
-```
+1. **Consent first.** Recording starts only when the user launches it and stops when the user presses `Ctrl+C`. Every session carries an explicit consent flag in its manifest.
+2. **Local by default.** Recording and analysis run entirely on the user's machine. Only the final `distill` step contacts an LLM, and it sends scrubbed text, never screenshots.
+3. **Reviewable results.** Outputs are plain Markdown and YAML files. Nothing is published automatically.
 
 ---
 
-## Session model
-
-| Artifact | Meaning |
-| -------- | ------- |
-| **Session** | One shadowing run under `sessions/<id>/`, with `manifest.json` and consent |
-| **Trace (raw)** | JSONL from the recorder (`kind` on macOS Swift, or native events on Windows) |
-| **Trace (clean)** | Scrubbed `CaptureEvent` rows in `trace.jsonl` |
-| **Segment** | Groups of events separated by idle time or app change |
-| **Step** | One user-visible action with a description and evidence event ids |
-| **Playbook** | Human-readable steps (deterministic from the trace) |
-| **Ontology / CQs** | YAML proposals from the LLM, tied to step ids |
-
-Each step cites **event ids** (`E-*`), not timestamps alone, so outputs stay auditable against the trace.
+## How it works
 
 ```mermaid
 flowchart LR
-  record["Record"] --> raw["trace.raw.jsonl"]
-  raw --> ingest["Ingest"]
-  ingest --> scrub["Scrub PII"]
-  scrub --> segment["Segment"]
-  segment --> analyze["Analyze"]
-  analyze --> distill["Distill optional LLM"]
-  distill --> out["playbook · ontology · questions"]
+  record["1. Record"] --> analyze["2. Analyze"]
+  analyze --> distill["3. Distill"]
+  distill --> review["4. Review"]
 ```
 
-Recording produces raw JSONL. Ingest normalizes recorder formats. Scrubbing removes or tokenizes PII. Analyze builds steps and segments. Distill adds ontology and competency questions when an API key is configured.
+| Phase | What happens | Where it runs |
+| ----- | ------------ | ------------- |
+| **1. Record** | A native recorder captures clicks, keystrokes, and window changes into a raw trace | Your machine |
+| **2. Analyze** | Falcon removes personal data, groups events into tasks, and describes each step | Your machine |
+| **3. Distill** | An LLM proposes an ontology and competency questions based on the scrubbed steps | Your machine, with one outbound API call |
+| **4. Review** | You read the playbook and edit the YAML proposals before sharing them | Your machine |
+
+Capture is platform specific. On macOS, Falcon ships a Swift recorder (`falcon-recorder`) that uses the Accessibility APIs. On Windows, it uses UI Automation. Everything after capture is a single Python pipeline shared by both platforms.
 
 ---
 
-## Operating model
+## Installation
 
-| Step | Question | What happens |
-| ---- | ---------- | ------------ |
-| **Record** | What did the user do? | macOS: Swift `falcon-recorder` · Windows: UIA capture → `sessions/<id>/trace.raw.jsonl` |
-| **Check** | Is the bundle valid? | `falcon check` — manifest, consent, non-empty trace |
-| **Ingest** | Is the trace in one shape? | Optional normalize in place on `trace.raw.jsonl` |
-| **Analyze** | What are the steps? | Scrub → `trace.jsonl`, `segments.json`, `analysis.json` |
-| **Distill** | What ontology fits? | LLM → `playbook.md`, YAML files (playbook text is also built without LLM) |
-| **Report** | Show the playbook | Prints `playbook.md` |
+### End users
 
-```mermaid
-flowchart TB
-  subgraph capture["Capture per OS"]
-    mac["macOS Swift recorder"]
-    win["Windows UIA"]
-  end
-  mac --> bundle["sessions/id/"]
-  win --> bundle
-  bundle --> engine["Falcon Python pipeline"]
-  engine --> artifacts["trace · analysis · playbook"]
+No Python, `uv`, or `pip` is required.
+
+1. Download the latest archive from [Releases](https://github.com/trybacked/falcon/releases):
+   `Falcon-macos-<arch>.zip` for macOS or `Falcon-win64.zip` for Windows.
+2. Unzip the archive.
+3. Run the installer:
+   on macOS, double-click `Install.command`;
+   on Windows, right-click `Install.ps1` and choose *Run with PowerShell*.
+4. Open a new terminal and run `falcon --version` to confirm the installation.
+
+On macOS, the system will ask you to grant **Accessibility** and, in most cases, **Input Monitoring** permissions to `falcon-recorder`. Both are required to capture user activity. You can review them later under *System Settings > Privacy & Security*.
+
+### From source
+
+Requirements: Python 3.12 or later and [uv](https://docs.astral.sh/uv/). On macOS, Xcode command line tools are needed to build the recorder.
+
+```bash
+git clone https://github.com/trybacked/falcon.git
+cd falcon
+uv sync --group dev
+cd packages/platform-macos && swift build -c release && cd ../..   # macOS only
+uv run falcon --help
 ```
 
 ---
 
-## Command reference
+## Usage
 
-Global: `falcon --version` · `falcon --config path/to/config.toml` · env `FW_*` (see `config.toml.example`).
+A complete session takes four commands.
 
-| Command | Phase | Result |
-| ------- | ----- | ------ |
-| `falcon record --name ID` | Capture | New session folder + recording (Ctrl+C to stop) |
-| `falcon record --legacy-python` | Capture | Deprecated PyObjC path on macOS only |
-| `falcon check --session ID` | Validate | Manifest + trace checks, no writes |
-| `falcon ingest --session ID` | Normalize | Recorder JSONL → unified events in `trace.raw.jsonl` |
-| `falcon analyze --session ID` | Understand | Scrubbed trace, segments, `analysis.json` |
-| `falcon distill --session ID` | Enrich | Playbook + ontology + competency questions (needs API key) |
-| `falcon report --session ID` | Read | Playbook to stdout |
+```bash
+# 1. Start recording. Work as usual, then press Ctrl+C to stop.
+falcon record --name demo
 
-If `--session` is omitted, commands use the latest session under `sessions_root` (from config).
+# 2. Scrub personal data and build the step-by-step analysis.
+falcon analyze --session demo
+
+# 3. Generate the playbook and the ontology proposals (requires an API key).
+export AI_GATEWAY_API_KEY="your-key"
+falcon distill --session demo
+
+# 4. Print the playbook.
+falcon report --session demo
+```
+
+All files are written to `sessions/demo/`. If you omit `--session`, Falcon uses the most recent session.
+
+### Commands
+
+| Command | Purpose | Writes |
+| ------- | ------- | ------ |
+| `falcon record --name <id>` | Start a new recording session | `manifest.json`, `trace.raw.jsonl` |
+| `falcon check --session <id>` | Validate a session without modifying it | Nothing |
+| `falcon ingest --session <id>` | Normalize the raw trace into a single event format | `trace.raw.jsonl` (in place) |
+| `falcon analyze --session <id>` | Scrub personal data, segment tasks, describe steps | `trace.jsonl`, `segments.json`, `analysis.json` |
+| `falcon distill --session <id>` | Produce the playbook and ontology proposals via LLM | `playbook.md`, `ontology_proposals.yaml`, `competency_questions.yaml` |
+| `falcon report --session <id>` | Print the playbook to the terminal | Nothing |
+
+Global options: `--version` prints the version, `--config <path>` selects a configuration file.
+
+`ingest` is optional. `analyze` normalizes the trace automatically; run `ingest` only when you want to inspect the normalized trace before analysis.
 
 ---
 
-## Data residency
+## Session folder
 
-| Data | Leaves the machine |
-| ---- | ------------------ |
-| Screenshots / frames | **No** — stay under the session folder unless you copy them |
-| Raw + scrubbed trace | **No** — local JSONL unless you upload them |
-| Playbook / YAML outputs | **No** — written next to the session |
-| LLM request (`distill`) | **Yes** — scrubbed step descriptions and metadata only; no frame payloads in prompts |
+Each session lives in its own folder under `sessions/`.
 
-Set `AI_GATEWAY_API_KEY` (or `llm.api_key_env` in config) only when you choose to run `distill`. Recording and `analyze` do not require a network call.
+| File | Created by | Contents |
+| ---- | ---------- | -------- |
+| `manifest.json` | `record` | Session id, consent flag, Falcon version, platform |
+| `trace.raw.jsonl` | `record` | Raw events from the recorder, one JSON object per line |
+| `trace.jsonl` | `analyze` | The same events after personal data has been removed |
+| `segments.json` | `analyze` | Groups of events separated by idle time or application change |
+| `analysis.json` | `analyze` | One entry per step, with description and supporting event ids |
+| `playbook.md` | `distill` | The human-readable playbook |
+| `ontology_proposals.yaml` | `distill` | Proposed objects, properties, and relationships |
+| `competency_questions.yaml` | `distill` | Questions the ontology should answer |
 
 ---
 
-## Security note
+## Configuration
 
-Falcon uses OS-level **accessibility and input** APIs to record UI activity (similar to assistive or automation tools). Unsigned release binaries may trigger antivirus **false positives**, especially PyInstaller bundles. Prefer [official Releases](https://github.com/trybacked/falcon/releases), verify checksums when published, and plan **code signing + notarization** (macOS) / **Authenticode** (Windows) for production rollouts.
+Falcon reads `config.toml` from the current directory, from the path given with `--config`, or from the `FW_CONFIG` environment variable. All settings have defaults, so the file is optional. A full example is provided in [`config.toml.example`](./config.toml.example).
+
+| Section | Key | Default | Description |
+| ------- | --- | ------- | ----------- |
+| `capture` | `idle_gap_s` | `45.0` | Seconds of inactivity that start a new segment |
+| `capture` | `frame_interval_s` | `3.0` | Minimum interval between captured frames |
+| `llm` | `base_url` | Vercel AI Gateway | OpenAI-compatible endpoint used by `distill` |
+| `llm` | `model` | `openai/gpt-4o-mini` | Model used by `distill` |
+| `llm` | `api_key_env` | `AI_GATEWAY_API_KEY` | Environment variable that holds the API key |
+| `paths` | `sessions_root` | `sessions` | Folder where sessions are stored |
+| `output` | `language` | `it` | Language of the generated playbook and proposals |
+
+---
+
+## Privacy and data residency
+
+Falcon is designed so that sensitive material never leaves the machine unless you decide otherwise.
+
+| Data | Sent to the LLM | Notes |
+| ---- | --------------- | ----- |
+| Screenshots and frames | No | Stored only inside the session folder |
+| Raw trace (`trace.raw.jsonl`) | No | May contain personal data; keep it local |
+| Scrubbed trace and analysis | No | Used only as input for `distill` |
+| Step descriptions and metadata | Yes, during `distill` | Personal data is removed before sending |
+| Playbook and YAML outputs | No | Written next to the session |
+
+`record`, `check`, `ingest`, and `analyze` work fully offline. Only `distill` requires network access and an API key.
+
+---
+
+## Security considerations
+
+Falcon relies on operating system accessibility and input APIs to observe user activity, the same APIs used by assistive technologies and automation tools. Because of this, and because release bundles are built with PyInstaller, antivirus software may report false positives on unsigned binaries.
+
+Recommendations:
+
+- Install only from the official [Releases](https://github.com/trybacked/falcon/releases) page.
+- Verify checksums when they are published alongside a release.
+- For organization-wide deployments, sign and notarize the macOS bundle and sign the Windows bundle with Authenticode.
 
 ---
 
@@ -150,37 +189,43 @@ Falcon uses OS-level **accessibility and input** APIs to record UI activity (sim
 
 ```bash
 uv sync --group dev
-make ci          # ruff + mypy + pytest
+make ci              # lint (ruff), type check (mypy), tests (pytest)
 uv run pytest -q
 ```
 
-macOS recorder (from repo root):
+Build a release bundle locally:
 
 ```bash
-cd packages/platform-macos && swift build -c release
+bash scripts/build-release-macos.sh        # produces dist/Falcon-macos-<arch>.zip
+./scripts/build-release-windows.ps1        # produces dist/Falcon-win64.zip
 ```
 
-Push a version tag to build release zips in CI:
+Pushing a tag that starts with `v` triggers the release workflow, which builds both bundles and attaches them to a GitHub Release:
 
 ```bash
-git tag v0.1.0 && git push origin v0.1.0
+git tag v0.1.0
+git push origin v0.1.0
 ```
+
+### Project structure
 
 ```
 falcon/
-├── packages/platform-macos/   # Swift falcon-recorder (macOS capture)
-├── src/falcon/                # ingest, pipeline, analyze, distill, CLI
-├── scripts/                   # release build + install helpers
-├── tests/
-└── config.toml.example
+  packages/platform-macos/   Swift recorder for macOS
+  src/falcon/                Python pipeline and CLI
+  scripts/                   Release build and installer scripts
+  tests/                     Test suite
+  config.toml.example        Example configuration
+  plan.md                    Design notes
 ```
 
-| Component | Responsibility |
-| --------- | ---------------- |
-| `falcon-recorder` | macOS JSONL capture (clicks, keys, window changes) |
-| `falcon.capture.windows` | Windows UIA polling backend |
-| `falcon.ingest` | Recorder formats → `CaptureEvent` |
-| `falcon.pipeline` | Scrub, segment, analyze orchestration |
-| `falcon.distill` | Playbook + LLM ontology/CQ |
-| `falcon` CLI | User-facing commands and bundled installs |
+| Module | Responsibility |
+| ------ | -------------- |
+| `falcon-recorder` | Captures clicks, keystrokes, and window changes on macOS |
+| `falcon.capture.windows` | Captures the same events on Windows through UI Automation |
+| `falcon.ingest` | Converts recorder output into a unified event model |
+| `falcon.pipeline` | Runs scrubbing, segmentation, and step analysis |
+| `falcon.distill` | Builds the playbook and calls the LLM for ontology proposals |
+| `falcon.cli` | Command line interface |
 
+Design notes and the original roadmap are in [`plan.md`](./plan.md).
